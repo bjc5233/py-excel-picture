@@ -18,7 +18,7 @@ from PIL import Image
 
 # ================ 基本配置 ================
 picPath = 'C:\\path\\python\\ExcelPicture\\resources\\1.jpg'
-picShowStyle = 1        #1:从左到右   2::从上到下
+picShowStyle = 1        #1-从左到右   2-从上到下  3-顺时针
 picExcelFitLine = 125   #Excel中显示较为完整的行数
 # ================ 基本配置 ================
 
@@ -39,7 +39,7 @@ RGBs.close()
 RGBs2 = open('resources\\pictureRGB.txt', 'w')
 for y in range(height):
     for x in range(width):
-        rgb = str(img.getpixel((x,y)))
+        rgb = str(img.getpixel((x, y)))
         RGBs2.write(rgb[1:-1] + "\t")
     RGBs2.write("\n")
 RGBs2.close()

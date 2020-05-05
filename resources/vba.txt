@@ -82,5 +82,67 @@ Private Sub Workbook_open()  '打开文件时开始执行
             Next
             delay (delayTime)
         Next
+    ElseIf showStyle = 3 Then
+        A1X = 1
+        A1Y = 1
+        A2X = width
+        A2Y = 1
+        B1X = width
+        B1Y = 2
+        B2X = width
+        B2Y = height
+        C1X = width - 1
+        C1Y = height
+        C2X = 1
+        C2Y = height
+        D1X = 1
+        D1Y = height - 1
+        D2X = 1
+        D2Y = 2
+        Do While A1X <= width / 2 + 1
+            '上
+            For X = A1X To A2X
+                oneRGB = RGBArray(A1Y, X)
+                Cells(A1Y, X).Interior.Color = RGB(oneRGB(0), oneRGB(1), oneRGB(2))
+            Next
+            A1X = A1X + 1
+            A1Y = A1Y + 1
+            A2X = A2X - 1
+            A2Y = A2Y + 1
+            
+            
+            '右
+            For Y = B1Y To B2Y
+                oneRGB = RGBArray(Y, B1X)
+                Cells(Y, B1X).Interior.Color = RGB(oneRGB(0), oneRGB(1), oneRGB(2))
+            Next
+            B1X = B1X - 1
+            B1Y = B1Y + 1
+            B2X = B2X - 1
+            B2Y = B2Y - 1
+        
+        
+            '下
+            For X = C1X To C2X Step -1
+                oneRGB = RGBArray(C2Y, X)
+                Cells(C2Y, X).Interior.Color = RGB(oneRGB(0), oneRGB(1), oneRGB(2))
+            Next
+            C1X = C1X - 1
+            C1Y = C1Y - 1
+            C2X = C2X + 1
+            C2Y = C2Y - 1
+        
+        
+            '左
+            For Y = D1Y To D2Y Step -1
+                oneRGB = RGBArray(Y, D1X)
+                Cells(Y, D1X).Interior.Color = RGB(oneRGB(0), oneRGB(1), oneRGB(2))
+            Next
+            D1X = D1X + 1
+            D1Y = D1Y - 1
+            D2X = D2X + 1
+            D2Y = D2Y + 1
+            delay (delayTime)
+        Loop
     End If
 End Sub
