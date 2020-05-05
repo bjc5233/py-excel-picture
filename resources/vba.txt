@@ -1,0 +1,86 @@
+#If Win64 Then
+    Private Declare PtrSafe Sub sleepp Lib "kernel32.dll" Alias "Sleep" (ByVal dwMilliseconds As LongLong)
+    Private Declare PtrSafe Function timeGetTime Lib "winmm.dll" () As LongPtr
+    Sub delay(T As LongPtr)
+        Dim time1 As LongPtr
+        time1 = timeGetTime
+        Do
+            DoEvents
+        Loop While timeGetTime - time1 < T
+    End Sub
+#Else
+    Private Declare Sub sleepp Lib "kernel32.dll" Alias "Sleep" (ByVal dwMilliseconds As Long)
+    Private Declare Function timeGetTime Lib "winmm.dll" () As Long
+    Sub delay(T As Long)
+        Dim time1 As Long
+        time1 = timeGetTime
+        Do
+            DoEvents
+        Loop While timeGetTime - time1 < T
+    End Sub
+#End If
+
+
+
+Private Sub Workbook_open()  '打开文件时开始执行
+    '基础配置
+    Dim delayTime, filePath As String, filePath2 As String, lineIndex, showStyle, width, height, RGBArray()
+    delayTime = 40
+    filePath = ThisWorkbook.Path & "\" & "resources\config.txt"
+    filePath2 = ThisWorkbook.Path & "\" & "resources\pictureRGB.txt"
+    If Dir(filePath) = "" Or Dir(filePath2) = "" Then
+        MsgBox ("rgb.txt文件不存在，请先执行ExcelPhoto.py")
+        End
+    End If
+    
+
+    '读取配置文件
+    Open filePath For Input As #1
+    Do While Not EOF(1)
+        On Error Resume Next
+        Line Input #1, nextline
+        config = Split(nextline, Chr(9))
+        showStyle = config(0)
+        width = config(1)
+        height = config(2)
+    Loop
+    Close #1
+
+
+    '读取图片RGB数据文件
+    lineIndex = 1
+    ReDim RGBArray(1 To height, 1 To width)
+    Open filePath2 For Input As #1
+    Do While Not EOF(1)
+        On Error Resume Next
+        Line Input #1, nextline
+        oneLineRGBs = Split(nextline, Chr(9))
+        oneLineRGBCount = UBound(oneLineRGBs)
+        For rowIndex = 0 To oneLineRGBCount
+            oneRGB = Split(oneLineRGBs(rowIndex), ",")
+            RGBArray(lineIndex, rowIndex + 1) = oneRGB
+        Next
+        lineIndex = lineIndex + 1
+    Loop
+    Close #1
+    
+    
+    '逐步展示像素图
+    If showStyle = 1 Then
+        For rowIndex = 1 To width
+            For lineIndex = 1 To height
+                oneRGB = RGBArray(lineIndex, rowIndex)
+                Cells(lineIndex, rowIndex).Interior.Color = RGB(oneRGB(0), oneRGB(1), oneRGB(2))
+            Next
+            delay (delayTime)
+        Next
+    ElseIf showStyle = 2 Then
+        For lineIndex = 1 To width
+            For rowIndex = 1 To height
+                oneRGB = RGBArray(lineIndex, rowIndex)
+                Cells(lineIndex, rowIndex).Interior.Color = RGB(oneRGB(0), oneRGB(1), oneRGB(2))
+            Next
+            delay (delayTime)
+        Next
+    End If
+End Sub
