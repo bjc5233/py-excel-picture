@@ -17,9 +17,10 @@ from PIL import Image
 
 
 # ================ 基本配置 ================
-picPath = 'C:\\path\\python\\ExcelPicture\\resources\\1.jpg'
+picPath = 'C:\\path\\python\\ExcelPicture\\resources\\2.jpg'
 picShowStyle = 1        #1-从左到右   2-从上到下  3-顺时针
 picExcelFitLine = 125   #Excel中显示较为完整的行数
+picDelayTime = 20       #像素展示的时间间隔
 # ================ 基本配置 ================
 
 
@@ -33,9 +34,10 @@ width = int(widthSrc * height / heightSrc)
 imgLoad = imgLoad.resize((width, height), Image.ANTIALIAS)
 img = imgLoad.convert("RGB")
 
-RGBs = open('resources\\config.txt', 'w')
-RGBs.write(str(picShowStyle) + "\t" + str(width) + "\t" + str(height))
-RGBs.close()
+
+Config = open('resources\\config.ini', 'w')
+Config.write("[config]\nstyle=" + str(picShowStyle) + "\ndelayTime=" + str(picDelayTime) + "\nwidth=" + str(width) + "\nheight=" + str(height))
+Config.close()
 RGBs2 = open('resources\\pictureRGB.txt', 'w')
 for y in range(height):
     for x in range(width):
